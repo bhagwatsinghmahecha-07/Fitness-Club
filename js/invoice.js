@@ -20,8 +20,6 @@ export function invoiceData(settings, m, p) {
     due: s.due,
     price: s.price,
     discount: s.discount || 0,
-    pointsUsed: s.pointsUsed || 0,
-    pointsValue: s.pointsValue || 0,
     paid: p.amount,
     balance: s.balance || 0,
     mode: p.mode,
@@ -189,9 +187,7 @@ function invoicePage(d, brand, custom, total) {
   x.textAlign = 'right'; x.fillText('AMOUNT', tx + tw - 28, y + 48);
   y += 74;
   const rows = [[`${d.plan || ''} gym membership`, money(d.price)]];
-  const plainDisc = (d.discount || 0) - (d.pointsValue || 0);
-  if (plainDisc > 0) rows.push(['Discount', '- ' + money(plainDisc)]);
-  if (d.pointsValue > 0) rows.push([`Reward points discount (${d.pointsUsed} points)`, '- ' + money(d.pointsValue)]);
+  if (d.discount > 0) rows.push(['Discount', '- ' + money(d.discount)]);
   rows.forEach(([a, b2], i) => {
     const rh = 86;
     if (i % 2) { x.fillStyle = '#f7fafd'; x.fillRect(tx, y, tw, rh); }
