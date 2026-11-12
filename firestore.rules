@@ -5,8 +5,9 @@ service cloud.firestore {
     // ---------------------------------------------------------------- helpers
     // The gym OWNER can read/write everything in their own gym.
     function isOwner(ownerId) {
-      // Owner lock: only this one login (the gym owner) is treated as the owner.
-      return request.auth != null && request.auth.uid == ownerId && request.auth.uid == '39BFfXXAoLeNkL3SsjAXdRa2U1j1';
+      // The owner is the logged-in user whose UID matches the gym folder (gyms/{their UID}).
+      // To lock it to one login, append:  && request.auth.uid == 'PASTE-OWNER-UID'
+      return request.auth != null && request.auth.uid == ownerId;
     }
 
     // A TRAINER is a signed-in user with a VERIFIED email that the owner added on the Staff page

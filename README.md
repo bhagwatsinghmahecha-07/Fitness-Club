@@ -86,4 +86,4 @@ Every member shows **Added by**, every renewal shows **Renewed by** and every pa
 - A removed trainer who tries to log in sees a short message on the login screen ("access was removed…"), and a person who was never added sees "not added as a trainer". They are signed out automatically, so reopening the app shows the login screen.
 - If you add a removed trainer again, they do NOT sign up again. They log in with their old password (or tap *Forgot Password?*).
 - Forgot password: the reset email's "Continue" button brings the person back to this app. For this, your Netlify domain must be listed in Firebase > Authentication > Settings > Authorized domains.
-- `firestore.rules` already contains the owner lock for UID `39BFfXXAoLeNkL3SsjAXdRa2U1j1`. Check it matches the owner login in Firebase > Authentication > Users.
+- `firestore.rules` treats the logged-in user whose UID matches the gym folder as the owner. To lock it to one login, add `&& request.auth.uid == 'YOUR-OWNER-UID'` in the isOwner function (UID is in Firebase > Authentication > Users).

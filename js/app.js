@@ -398,7 +398,12 @@ async function enter(user) {
     const wasTrainer = (() => { try { return !!JSON.parse(wasCache || 'null')?.o; } catch { return false; } })();
     let owner = null;
     for (let i = 0; i < 2 && owner === null; i++) {
-      try { owner = (await getDoc(doc(db, 'gyms', user.uid, 'settings', 'main'))).exists(); }
+      try {
+        const mref = doc(db, 'gyms', user.uid, 'settings', 'main');
+        owner = (await getDoc(mref)).exists();
+        // First login of a brand-new gym owner (account made in Firebase Console): create the gym record. The rules only allow this for the real owner.
+        if (!owner) { await setDoc(mref, { email: user.email || '', createdAt: Date.now() }, { merge: true }); owner = true; }
+      }
       catch (e) {
         if (e.code === 'permission-denied') { owner = false; if (i === 0) { owner = null; try { await user.getIdToken(true); } catch { /* ignore */ } } }
         else break; // offline / unknown: let the owner in
